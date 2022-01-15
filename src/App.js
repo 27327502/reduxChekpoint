@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import AddTask from "./components/AddTask";
+import ListTask from "./components/ListTask";
+import Task from "./components/Task";
+import "./App.css";
+import { filterTodo } from "./redux/actions/actions";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos);
+  const filter = useSelector((state) => state.filter);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AddTask />
+      <div className="filter">
+        <Button onClick={() => dispatch(filterTodo("All"))}>all</Button>
+        <Button onClick={() => dispatch(filterTodo(true))}>is done</Button>
+        <Button onClick={() => dispatch(filterTodo(false))}>not done</Button>
+      </div>
+      <ListTask
+        todos={
+          filter == "All"
+            ? todos
+            : todos.filter((element) => element.isDone == filter)
+        }
+      />
     </div>
   );
-}
+};
 
 export default App;
